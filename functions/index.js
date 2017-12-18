@@ -11,8 +11,8 @@ const template = require('fs').readFileSync(__dirname + '/index.template.html', 
 const serverBundle = require(path.join(__dirname,'/dist/vue-ssr-server-bundle.json'))
 const clientManifest = require(path.join(__dirname,'/dist/vue-ssr-client-manifest.json'))
 
-const isProd = false
-const useMicroCache = true
+const isProd = process.env.NODE_ENV === 'production'
+const useMicroCache = process.env.MICRO_CACHE !== 'false'
 const serverInfo =
   `express/${require('express/package.json').version} ` +
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
