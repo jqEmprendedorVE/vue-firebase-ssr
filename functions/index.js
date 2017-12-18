@@ -1,3 +1,4 @@
+const functions = require('firebase-functions');
 const express = require('express')
 const server = express()
 const path = require('path')
@@ -10,8 +11,8 @@ const template = require('fs').readFileSync(__dirname + '/index.template.html', 
 const serverBundle = require(path.join(__dirname,'/dist/vue-ssr-server-bundle.json'))
 const clientManifest = require(path.join(__dirname,'/dist/vue-ssr-client-manifest.json'))
 
-const isProd = process.env.NODE_ENV === 'production'
-const useMicroCache = process.env.MICRO_CACHE !== 'false'
+const isProd = false
+const useMicroCache = true
 const serverInfo =
   `express/${require('express/package.json').version} ` +
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
@@ -68,4 +69,16 @@ function render (req, res) {
 
 server.get('*', render)
 
-server.listen(8080)
+
+var ssrapp = exports.ssrapp = functions.https.onRequest(server);
+
+
+// server.listen(8080)
+
+
+// // Create and Deploy Your First Cloud Functions
+// // https://firebase.google.com/docs/functions/write-firebase-functions
+//
+// exports.helloWorld = functions.https.onRequest((request, response) => {
+//  response.send("Hello from Firebase!");
+// });
