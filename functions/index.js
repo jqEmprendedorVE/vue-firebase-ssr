@@ -69,7 +69,6 @@ function render (req, res) {
 
 server.get('*', render)
 
-
 var ssrapp = exports.ssrapp = functions.https.onRequest(server);
 
 

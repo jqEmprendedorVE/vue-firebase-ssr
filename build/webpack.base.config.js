@@ -1,9 +1,11 @@
 var path = require('path')
 var webpack = require('webpack')
 
+const isProd = process.env.NODE_ENV==='production'
+
 module.exports = {
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, isProd ? '../functions/dist' : '../dist'),
     publicPath: '/dist/',
     filename: '[name].[chunkhash].js'
   },
