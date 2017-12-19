@@ -4,6 +4,9 @@ var webpack = require('webpack')
 const isProd = process.env.NODE_ENV==='production'
 
 module.exports = {
+  devtool: isProd
+    ? '#eval-source-map'
+    : '#cheap-module-source-map',
   output: {
     path: path.resolve(__dirname, isProd ? '../functions/dist' : '../dist'),
     publicPath: '/dist/',
@@ -54,9 +57,9 @@ module.exports = {
     overlay: true
   },
   performance: {
-    hints: false
-  },
-  devtool: '#eval-source-map'
+    maxEntrypointSize: 300000,
+    hints: isProd ? 'warning' : false
+  }
 }
 
 if (process.env.NODE_ENV === 'production') {
