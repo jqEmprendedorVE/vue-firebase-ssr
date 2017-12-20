@@ -21,7 +21,13 @@ Vue.mixin({
   }
 })
 
-const { app, router } = createApp()
+const { app, router, store } = createApp()
+
+// prime the store with server-initialized state.
+// the state is determined during SSR and inlined in the page markup.
+if (window.__INITIAL_STATE__) {
+  store.replaceState(window.__INITIAL_STATE__)
+}
 
 // this assumes App.vue template root element has `id="app"`
 router.onReady(() => {

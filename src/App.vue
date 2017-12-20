@@ -8,3 +8,10 @@
     <router-view></router-view>
   </div>
 </template>
+<style type="text/css" media="screen">
+  @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+  body {
+    font-family: "Open Sans", sans-serif;
+    font-size: small;
+  }
+</style>
