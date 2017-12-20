@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { createApp } from './app'
 import ProgressBar from './components/ProgressBar.vue'
 

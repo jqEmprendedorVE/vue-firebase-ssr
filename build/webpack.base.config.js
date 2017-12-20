@@ -1,35 +1,32 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
+const vueConfig = require('./vue-loader.config')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
-const isProd = process.env.NODE_ENV==='production'
+const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   devtool: isProd
-    ? '#eval-source-map'
+    ? false
     : '#cheap-module-source-map',
   output: {
-    path: path.resolve(__dirname, isProd ? '../functions/dist' : '../dist'),
+    path: path.resolve(__dirname, '../dist'),
     publicPath: '/dist/',
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[hash].js'
+  },
+  resolve: {
+    alias: {
+      'public': path.resolve(__dirname, '../public')
+    }
   },
   module: {
     noParse: /es6-promise\.js$/, // avoid webpack shimming process
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader'
-        ],
-      },
-      {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {
-          loaders: {
-          }
-          // other vue-loader options go here
-        }
+        options: vueConfig
       },
       {
         test: /\.js$/,
@@ -40,45 +37,35 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'url-loader',
         options: {
+          limit: 10000,
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.css$/,
+        use: isProd
+          ? ExtractTextPlugin.extract({
+              use: 'css-loader?minimize',
+              fallback: 'vue-style-loader'
+            })
+          : ['vue-style-loader', 'css-loader']
       }
     ]
-  },
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js'
-    },
-    extensions: ['*', '.js', '.vue', '.json']
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-    overlay: true
   },
   performance: {
     maxEntrypointSize: 300000,
     hints: isProd ? 'warning' : false
-  }
-}
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
-  ])
+  },
+  plugins: isProd
+    ? [
+        new webpack.optimize.UglifyJsPlugin({
+          compress: { warnings: false }
+        }),
+        new ExtractTextPlugin({
+          filename: 'common.[hash].css'
+        })
+      ]
+    : [
+        new FriendlyErrorsPlugin()
+      ]
 }

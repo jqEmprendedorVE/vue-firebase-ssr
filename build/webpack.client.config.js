@@ -1,22 +1,58 @@
+const glob = require('glob')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const baseConfig = require('./webpack.base.config.js')
+const base = require('./webpack.base.config')
+const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
-module.exports = merge(baseConfig, {
+const config = merge(base, {
   entry: {
     app: './src/entry-client.js'
   },
+  resolve: {
+    alias: {
+      // 'create-api': './create-api-client.js'
+    }
+  },
   plugins: [
-    // Important: this splits the webpack runtime into a leading chunk
-    // so that async chunks can be injected right after it.
-    // this also enables better caching for your app/vendor code.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "manifest",
-      minChunks: Infinity
+    // strip dev-only code in Vue source
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.VUE_ENV': '"client"'
     }),
-    // This plugins generates `vue-ssr-client-manifest.json` in the
-    // output directory.
+    // extract vendor chunks for better caching
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module) {
+        // a module is extracted into the vendor chunk if...
+        return (
+          // it's inside node_modules
+          /node_modules/.test(module.context) &&
+          // and not a CSS file (due to extract-text-webpack-plugin limitation)
+          !/\.css$/.test(module.request)
+        )
+      }
+    }),
+    // extract webpack runtime & manifest to avoid vendor chunk hash changing
+    // on every build.
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest'
+    }),
     new VueSSRClientPlugin()
   ]
 })
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(
+    // auto generate service worker
+    new SWPrecachePlugin({
+      cacheId: 'vue-ssr',
+      filename: 'service-worker.js',
+      minify: true,
+      dontCacheBustUrlsMatching: /./,
+      staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/]
+    })
+  )
+}
+
+module.exports = config
