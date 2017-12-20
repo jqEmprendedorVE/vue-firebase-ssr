@@ -11,7 +11,7 @@ const { createBundleRenderer } = require('vue-server-renderer')
 // const serverBundle = require(path.join(__dirname,'/dist/vue-ssr-server-bundle.json'))
 // const clientManifest = require(path.join(__dirname,'/dist/vue-ssr-client-manifest.json'))
 
-const isProd = true
+const isProd = process.env.NODE_ENV !== 'development'
 const useMicroCache = process.env.MICRO_CACHE !== 'false'
 const serverInfo =
   `express/${require('express/package.json').version} ` +
@@ -126,7 +126,6 @@ function render (req, res) {
     if (err) {
       return handleError(err)
     }
-
     res.end(html)
     if (cacheable) {
       microCache.set(req.url, html)
