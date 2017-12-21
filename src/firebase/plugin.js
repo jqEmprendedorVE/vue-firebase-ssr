@@ -1,6 +1,8 @@
-import Vue from 'vue'
-import firebase from 'firebase'
-import 'Firebase/firestore'
+import firebase from 'firebase/app'
+import 'firebase/database'
+import 'firebase/firestore'
+import 'firebase/auth'
+import 'firebase/storage'
 
 var FirebasePlugin = {
   db: () => firebase.database(),
@@ -11,12 +13,5 @@ var FirebasePlugin = {
 
 export default function (Vue, options) {
   if (!firebase.apps.length) firebase.initializeApp(options)
-  Vue.firebase = FirebasePlugin
-  Object.defineProperties(Vue.prototype, {
-    $firebase: {
-      get: function () {
-        return Vue.firebase
-      }
-    }
-  })
+  Vue.prototype.$firebase = FirebasePlugin
 }

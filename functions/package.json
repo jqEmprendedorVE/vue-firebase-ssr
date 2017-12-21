@@ -11,13 +11,16 @@
   "dependencies": {
     "compression": "^1.7.1",
     "express": "^4.16.2",
+    "firebase": "^4.8.1",
     "firebase-admin": "~5.4.2",
     "firebase-functions": "^0.7.1",
     "lru-cache": "^4.1.1",
     "route-cache": "^0.4.3",
     "vue": "^2.5.11",
     "vue-router": "^3.0.1",
-    "vue-server-renderer": "^2.5.11"
+    "vue-server-renderer": "^2.5.11",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
   },
   "private": true
 }

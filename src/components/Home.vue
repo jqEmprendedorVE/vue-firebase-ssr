@@ -21,6 +21,15 @@
       return {
         data: ':: SSR'
       }
+    },
+    created() {
+      this.$firebase.db().ref('data').once('value', snapshot=>{
+        console.log(snapshot.val())
+      })
+      /*
+      
+      
+       */
     }
   }
 </script>
