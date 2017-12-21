@@ -4,3 +4,8 @@
     <p>Soy Julio Quintana, y este es un ejemplo de lo que aprendí con Vue SSR</p>
   </div>
 </template>
+<script type="text/javascript">
+  export default {
+    title: 'About',
+  }
+</script>

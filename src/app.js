@@ -5,6 +5,15 @@ import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 import Firebase from './firebase/plugin'
 
+import titleMixin from './util/title'
+import descriptionMixin from './util/meta/description'
+import keywordsMixin from './util/meta/keywords'
+
+// mixin for handling title
+Vue.mixin(titleMixin)
+Vue.mixin(descriptionMixin)
+Vue.mixin(keywordsMixin)
+
 export function createApp (context) {
   const router = createRouter()
   const store = createStore()

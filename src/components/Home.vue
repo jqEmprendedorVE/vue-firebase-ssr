@@ -7,14 +7,30 @@
 </template>
 <script>
   export default {
+    title: 'Home',
+    description() {
+      return `El perfil de ${this.name}`
+    },
+    keywords() {
+      return `${this.name} ${this.lastname} ${this.email}`
+    },
     asyncData ({ store, route }) {
       // return the Promise from the action
-      return store.dispatch('fetchItem', 15696759)
+      return store.dispatch('fetchItem', 1)
     },
     computed: {
       // display the item from store state.
       item () {
-        return this.$store.state.items[15696759]
+        return this.$store.state.items[1]
+      },
+      name () {
+        return this.$store.state.items[1].nombre
+      },
+      lastname () {
+        return this.$store.state.items[1].apellido
+      },
+      email () {
+        return this.$store.state.items[1].correo
       }
     },
     data() {
