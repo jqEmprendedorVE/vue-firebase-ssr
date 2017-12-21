@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Area de la APP con Firebase</h1>
+    <h2>Area de la APP con Firebase <small style="font-size:0.55em">ver más en <a href="https://github.com/jqEmprendedorVE/vue-firebase-ssr" target="_blank" >GitHub</a> </small></h2>
     <hr>
     <router-link to='/'>Home</router-link>
     &nbsp;
