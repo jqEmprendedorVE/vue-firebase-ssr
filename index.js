@@ -116,7 +116,7 @@ function render (req, res) {
 
   const context = {
     title: 'Vue SSR',
-    meta: { description: '', keywords: ''},
+    meta: '',
     url: req.url
   }
 

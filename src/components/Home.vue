@@ -7,6 +7,20 @@
 </template>
 <script>
   export default {
+    head: {
+      title() {return `${this.name}  con `} ,
+      meta: [
+        {name: 'description', content() { return `El perfil de ${this.name}`} },
+        {name: 'keywords', content() { return `${this.name} ${this.lastname} ${this.email}` } },
+        { name:"twitter:card", content:"summary"},
+        { name:"twitter:site", content:"@jqEmprendedorVE"},
+        { name:"twitter:creator", content:"@jqEmprendedorVE"},
+        { name:"twitter:url", content:"https://vue-firebase-ssr.firebaseapp.com"},
+        { name:"twitter:title", content() {return `${this.name} creando Vuejs SSR + Firebase`}},
+        { name:"twitter:description", content:"Modelo de Vuejs SSR con Firebase Cloud Function + Hosting"},
+        { name:"twitter:image", content:"https://www.filepicker.io/api/file/nS7a8itSTcaAsyct6rVp"}
+      ]
+    },
     title: 'Home',
     description() {
       return `El perfil de ${this.name}`
@@ -40,7 +54,7 @@
     },
     created() {
       this.$firebase.db().ref('data').once('value', snapshot=>{
-        console.log(snapshot.val())
+        // console.log(snapshot.val())
       })
     }
   }

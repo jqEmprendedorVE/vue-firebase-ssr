@@ -6,6 +6,8 @@
 </template>
 <script type="text/javascript">
   export default {
-    title: 'About',
+    head: {
+      title: 'Acerca de'
+    }
   }
 </script>

@@ -4,15 +4,9 @@ import { createRouter } from './router'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 import Firebase from './firebase/plugin'
+import headMixin from './util/head'
 
-import titleMixin from './util/title'
-import descriptionMixin from './util/meta/description'
-import keywordsMixin from './util/meta/keywords'
-
-// mixin for handling title
-Vue.mixin(titleMixin)
-Vue.mixin(descriptionMixin)
-Vue.mixin(keywordsMixin)
+Vue.mixin(headMixin)
 
 export function createApp (context) {
   const router = createRouter()
