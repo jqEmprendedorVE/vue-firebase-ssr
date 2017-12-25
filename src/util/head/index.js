@@ -1,3 +1,26 @@
+const cleanMetas = () => {
+  return new Promise ((resolve, reject)=>{
+    const items = document.head.querySelectorAll('meta')
+    for(const i in items) {
+      if(typeof items[i]==='object' && ['viewport'].findIndex(val=>val===items[i].name)!=0 && items[i].name!=='')
+        document.head.removeChild(items[i])
+    }
+    resolve()
+  })
+}
+
+const createMeta = (vm, name, ...attr) => {
+  const meta = document.createElement('meta')
+  meta.setAttribute(name[0], name[1])
+  for(const i in attr){
+    const at = attr[i]
+    for(const k in at) {
+      meta.setAttribute(at[k][0], getString(vm, at[k][1]))
+    }
+  }
+  document.head.appendChild(meta);
+}
+
 const getString = (vm, content) => {
   return typeof content === 'function'
     ? content.call(vm)
@@ -41,11 +64,25 @@ const serverHeadMixin = {
 
 const clientHeadMixin = {
   mounted () {
+    const vm = this
+
     const { head } = this.$options
     if(head){
       const { title } = head 
-      if(title)
+      if(title){
         document.title = `${getString(this, title)} :: Vue SSR`
+      }
+
+      cleanMetas().then(()=>{
+        const { meta } = head 
+        if(meta){
+          for(const nm in meta) {
+            const name = Object.entries(meta[nm])[0]
+            const attr = Object.entries(meta[nm]).splice(1,Object.entries(meta[nm]).length)
+            createMeta(vm, name, attr)
+          }
+        }
+      })
     }
   }
 }

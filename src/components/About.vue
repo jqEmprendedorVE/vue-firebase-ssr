@@ -7,7 +7,10 @@
 <script type="text/javascript">
   export default {
     head: {
-      title: 'Acerca de'
+      title: 'Acerca de',
+      meta: [
+        { name: 'description', content: 'Acerca de este proyecto'}
+      ]
     }
   }
 </script>
