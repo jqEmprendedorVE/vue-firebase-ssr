@@ -10,7 +10,7 @@ Adicional tomar todas las peticiones de nuestro hosting de Firebase y hacer redi
 ```
 {
   "hosting": {
-    "public": "public",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
