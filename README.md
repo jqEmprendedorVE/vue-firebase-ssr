@@ -52,5 +52,13 @@ npm run deploy
 
 ```
 
+## Posibles issues
+
+Aveces pasa que al ejecutar `firebase serve --debug` se denota un error relacionado a los watch permitidos. Se puede fixear ejecuntado este comando
+```
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p 
+```
+En mi caso, se ejecuto con Fedora 30(Linux)
+
 > ## Proximamente
 > Una mejor explicación de como clonar este repo.

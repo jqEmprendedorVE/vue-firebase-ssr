@@ -1,8 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 const vueConfig = require('./vue-loader.config')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -43,11 +44,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: isProd
-          ? ExtractTextPlugin.extract({
-              use: 'css-loader?minimize',
-              fallback: 'vue-style-loader'
-            })
+        use: isProd 
+          ? [
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  // you can specify a publicPath here
+                  // by default it uses publicPath in webpackOptions.output
+                  publicPath: '../',
+                  hmr: process.env.NODE_ENV === 'development',
+                },
+              },
+              'css-loader',
+            ]
           : ['vue-style-loader', 'css-loader']
       }
     ]
@@ -56,16 +65,42 @@ module.exports = {
     maxEntrypointSize: 300000,
     hints: isProd ? 'warning' : false
   },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all"
+        },
+        manifest: {
+          name: "manifest"
+        }
+      },
+    },
+  },
   plugins: isProd
     ? [
-        new webpack.optimize.UglifyJsPlugin({
-          compress: { warnings: false }
+        new MiniCssExtractPlugin({
+          // Options similar to the same options in webpackOptions.output
+          // both options are optional
+          filename: '[name].css',
+          chunkFilename: '[id].css',
         }),
-        new ExtractTextPlugin({
-          filename: 'common.[hash].css'
-        })
+        new VueLoaderPlugin()
       ]
     : [
-        new FriendlyErrorsPlugin()
-      ]
+        new FriendlyErrorsPlugin(),
+        new VueLoaderPlugin()
+      ],
+  mode: isProd
+    ? 'production'
+    : 'development'
 }

@@ -1,5 +1,6 @@
 node_modules/
 functions/node_modules/
+\.firebase/
 dist/
 functions/dist/
 npm-debug.log*
